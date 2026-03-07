@@ -66,6 +66,11 @@
 
 2. Process Scheduling Algorithms in an Operating System
 
-    1. Completely Fair Scheduler (CFS) (linux 2.6.23 – 6.x):  
+    1. Completely Fair Scheduler (CFS) (linux 2.6.23 – 6.x): 
+        CFS (Completely Fair Scheduler) is Linux’s default CPU scheduler. It assigns each task a virtual runtime (vruntime) that advances when the task runs, 
+        with the rate scaled by the task’s priority (nice/weight): higher priority means vruntime grows slower. All runnable tasks on a CPU are stored in a red-black tree ordered by vruntime. 
+        CFS always runs the task with the smallest vruntime (the leftmost node), so over time every task’s vruntime stays close and each gets a fair (and priority-weighted) share of the CPU. 
+        Time slices are not fixed; they depend on how many tasks exist and on the target scheduling latency and minimum granularity.
+
 
     2. Earliest Eligible Virtual Deadline First (EEVDF) (linux 6.6):
