@@ -1,0 +1,71 @@
+1. Process Vs threads
+    Process:
+        Each process has:
+
+            Program code, Data, Stack, Heap, Process Control Block (PCB), Process state
+            1. Assign a Process ID (PID):
+            2. Create Process Control Block (PCB):
+                PCB contains 1. Process ID, Process state, Program counter, CPU registers, Memory information, Scheduling information, I/O status
+            3. Allocate Memory:
+                Memory is allocated for: Program code, Stack, Heap, Data section
+            4. Initialize Process State: 
+                The process is placed in Ready State so that the CPU scheduler can execute it. states New, ready, running , waiting, terminated
+            5. Load Program into Memory:
+                The program instructions are loaded into memory from disk.
+            6. Add Process to Ready Queue: 
+                The OS places the process in the ready queue, waiting for CPU allocation.
+
+    When a child process is created, it may share resources such as open files, environment variables, and program code with the parent process. However, it has its own PID, PCB, memory space, CPU registers, and execution state, making it an independent process.
+
+    1. Resources Shared Between Parent and Child Process
+        These resources may be shared or inherited by the child process.
+        1. Open Files
+            . Child process inherits open file descriptors from the parent.
+            . Both processes can access the same file.
+        2. Environment Variables
+            The child process receives a copy of the parent’s environment variables.
+        3. Program Code (Initially)
+            . Parent and child may share the same program code in memory initially.
+            . Many systems use Copy-on-Write (COW) to optimize memory usage.
+        4. Shared Libraries
+            Both processes may use the same shared libraries loaded in memory.
+        5. Some System Resources
+            Current working directory, Signal handlers, File permissions
+    2. Resources NOT Shared Between Parent and Child Process
+        1. Process ID, Process Control Block (PCB), Memory Space, CPU Registers, Process State, 
+
+    Copy-on-Write (COW) in Process Creation
+
+    Copy-on-Write is a memory management technique used during process creation where the parent and child processes initially share the same memory pages. The operating system creates a separate copy of a memory page only when one of the processes modifies it. This improves performance and reduces memory usage.
+
+        . Parent and child share the same memory pages
+        . These pages are marked read-only
+        . If either process tries to modify the memory, the OS creates a copy of that page
+
+        So copying happens only when writing occurs.
+
+    fork(), exec() & Vfork()
+
+    fork() creates a new child process by duplicating the parent process. exec() replaces the current process with a new program without creating a new process. vfork() is similar to fork but allows the child process to share the parent's memory temporarily, making process creation faster.
+
+2. Threads:
+
+    Process
+    +--------------------------------+
+    | Code Section                   |
+    | Data Section                   |
+    | Heap                           |
+    |                                |
+    |   Thread 1 → Stack + Registers |
+    |   Thread 2 → Stack + Registers |
+    |   Thread 3 → Stack + Registers |
+    +--------------------------------+
+
+    All threads share: Code, Data, Heap
+    But each thread has:  Its own stack,  CPU registers
+
+2. Process Scheduling Algorithms in an Operating System
+
+    1. Completely Fair Scheduler (CFS) (linux 2.6.23 – 6.x):  
+
+    2. Earliest Eligible Virtual Deadline First (EEVDF) (linux 6.6):
