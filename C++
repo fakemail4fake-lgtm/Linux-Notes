@@ -77,3 +77,17 @@ int main() {
     cout << p1.use_count(); // still 1
 }
 
+Problem: Circular Dependency with shared_ptr
+If two objects hold shared_ptr to each other:
+
+Reference count never reaches zero
+Memory leak occurs  Circular reference for weak pointer 
+
+This is the reason we use weak pointers(weak_ptr) as they are not reference counted. 
+So, the class in which weak_ptr is declared doesn’t have a stronghold over it i.e. the ownership isn’t shared, 
+but they can have access to these objects.Circular reference for weak pointer 
+
+So, in the case of shared_ptr because of cyclic dependency use_count never reaches zero which is prevented by using weak_ptr, 
+which removes this problem by declaring A_ptr as weak_ptr, thus class A does not own it, only has access to it and we also need 
+to check the validity of object as it may go out of scope. In general, it is a design issue.
+
