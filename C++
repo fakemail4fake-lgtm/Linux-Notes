@@ -1,3 +1,8 @@
+unique_ptr, shared_ptr & weak_ptr:
+
+In C++, smart pointers manage dynamic memory automatically. unique_ptr provides exclusive ownership, shared_ptr allows shared ownership using reference counting, 
+and weak_ptr is a non-owning pointer used to avoid circular references. auto_ptr was deprecated because ownership transfer during copy caused bugs.
+
 auto_ptr:
 auto_ptr was the first smart pointer introduced in C++. It manages a dynamically allocated object and deletes it when the auto_ptr goes out of scope.
 
