@@ -1,3 +1,7 @@
+smart pointer:  
+Smart Pointers: Use smart pointers wherever you can and avoid using raw pointers. They automatically manage memory and deallocate it when objects go out of scope.
+
+below are the smart pointes used in C++
 unique_ptr, shared_ptr & weak_ptr:
 
 In C++, smart pointers manage dynamic memory automatically. unique_ptr provides exclusive ownership, shared_ptr allows shared ownership using reference counting, 
@@ -90,4 +94,22 @@ but they can have access to these objects.Circular reference for weak pointer
 So, in the case of shared_ptr because of cyclic dependency use_count never reaches zero which is prevented by using weak_ptr, 
 which removes this problem by declaring A_ptr as weak_ptr, thus class A does not own it, only has access to it and we also need 
 to check the validity of object as it may go out of scope. In general, it is a design issue.
+
+
+Shallow Copy and Deep Copy in C++
+
+In C++, creating a copy of an object involves duplicating its data and resources using the copy constructor or the assignment operator.
+Depending on how the object manages dynamic memory and other resources, copying can be performed using either Shallow Copy or Deep Copy. 
+Choosing the correct copying approach is important to prevent memory-related errors and ensure proper resource management.
+
+Shallow Copy
+In shallow copy, all variable values are copied, but dynamically allocated memory addresses are shared between objects.
+Both objects point to the same heap memory, so changes made through one object affect the other.
+This can lead to runtime errors like dangling pointers and double deletion, so it does not create an independent copy.
+
+Deep Copy
+In deep copy, a new object is created by copying all variable values and allocating separate memory for dynamically allocated variables.
+Both the original and copied objects store their data in different memory locations.
+Changes made to one object do not affect the other because a custom copy constructor is used.
+
 
