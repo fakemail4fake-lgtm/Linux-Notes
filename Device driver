@@ -97,8 +97,10 @@ copy_from_user()
        ↓
 Kernel buffer
 
+use-space calls: 
 write(fd, "hello", 5);
 
+kernel driver function called:
 ssize_t my_write(struct file *file,
                  const char __user *buf,
                  size_t len,
@@ -110,6 +112,124 @@ ssize_t my_write(struct file *file,
     return len;
 }
 
+6. what is copy-on-write 
+
+Copy-on-Write (COW) is a memory management technique where multiple processes share the same memory pages until one process modifies the data, 
+at which point the operating system creates a separate copy of the page.
+
+fork() called
+      ↓
+Parent & Child share memory
+      ↓
+Pages marked read-only
+      ↓
+Process attempts write
+      ↓
+Page fault triggered
+      ↓
+Kernel copies the page
+      ↓
+Process writes to new page
+
+7. what is the system call we use to get the virtual address space in linux 
+
+However, when you want to allocate or obtain virtual memory, Linux provides several system calls / kernel functions.
+The most commonly used call is mmap().
+
+void *mmap(void *addr, size_t length, int prot,
+           int flags, int fd, off_t offset);
+
+#include <sys/mman.h>
+
+void *addr;
+
+addr = mmap(NULL, 4096,
+            PROT_READ | PROT_WRITE,
+            MAP_PRIVATE | MAP_ANONYMOUS,
+            -1, 0);
+
+Application
+     |
+malloc() / mmap()
+     |
+Virtual Address Returned
+     |
+MMU translates
+     |
+Physical Memory
+
+malloc()/brk()/sbrk()/kmalloc()
+
+phys_addr_t virt_to_phys(const volatile void *address);  --> virtual address to physical address
+
+char *ptr;
+phys_addr_t phys;
+
+ptr = kmalloc(1024, GFP_KERNEL);
+phys = virt_to_phys(ptr);
+
+printk("Virtual Address = %p\n", ptr);
+printk("Physical Address = %pa\n", &phys);
+
+
+8. how can we request I/O memory in the user space ? explain with coding
+
+In Linux, user-space programs normally cannot directly access I/O memory (device registers) because it is protected by the kernel.
+However, it can be accessed by mapping the device’s physical I/O memory into user space using mmap().
+
+This is commonly used in memory-mapped I/O (MMIO).
+
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#include <stdint.h>
+
+#define DEVICE_ADDR 0x40000000
+#define MAP_SIZE 4096
+
+int main()
+{
+    int fd;
+    void *map_base;
+    volatile uint32_t *reg;
+
+    fd = open("/dev/mem", O_RDWR | O_SYNC);
+    if (fd < 0)
+    {
+        perror("open");
+        return -1;
+    }
+
+    map_base = mmap(NULL,
+                    MAP_SIZE,
+                    PROT_READ | PROT_WRITE,
+                    MAP_SHARED,
+                    fd,
+                    DEVICE_ADDR);
+
+    if (map_base == MAP_FAILED)
+    {
+        perror("mmap");
+        return -1;
+    }
+
+    reg = (volatile uint32_t *)map_base;
+    printf("Register value: %x\n", *reg);
+    *reg = 0x1;   // write to device register
+    munmap(map_base, MAP_SIZE);
+    close(fd);
+    return 0;
+}
+
+9. Difference between ioremap and mmap 
+
+Feature	                ioremap()	                                                mmap()
+Space	                Kernel space	                                            User space
+Purpose	                Map physical device I/O memory → kernel virtual address	    Map file/device memory → user virtual address
+Used in	                Device drivers	                                            User applications
+Defined in	            Linux kernel	                                            POSIX system call
+Returns	                Kernel virtual address	                                    User virtual address
 
 
 
