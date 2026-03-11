@@ -1,1 +1,55 @@
+1. how we register the character device driver
+
+In the Linux Kernel, a character device driver must be registered with the kernel so the kernel knows that your driver handles a 
+particular major/minor device number. Registration is typically done during the module initialization.
+
+There are two common ways to register a character device driver:
+
+1️⃣ Using register_chrdev() (Older / Simple Method)
+static int major;
+static int __init my_init(void)
+{
+    major = register_chrdev(0, "mychardev", &fops);
+    printk("Major number = %d\n", major);
+    return 0;
+}
+
+Parameters:
+major – Major device number (0 for dynamic allocation)
+name – Name of the device
+fops – Pointer to file_operations structure
+
+2️⃣ Using alloc_chrdev_region() + cdev (Modern Method ✅)
+This is the recommended approach.
+
+Steps:
+Allocate device numbers
+Initialize cdev structure
+Add device to kernel
+
+dev_t dev;
+struct cdev my_cdev;
+static int __init my_init(void)
+{
+    alloc_chrdev_region(&dev, 0, 1, "mychardev");
+    cdev_init(&my_cdev, &fops);
+    cdev_add(&my_cdev, dev, 1);
+    printk("Major: %d Minor: %d\n", MAJOR(dev), MINOR(dev));
+    return 0;
+}
+
+2. when the module are loaded into kernel linux
+
+Linux modules are loaded dynamically using commands like insmod or modprobe. The module file (.ko) is inserted into kernel memory, 
+dependencies are resolved, and the module initialization function registered with module_init() is executed.
+
+When a module is loaded:
+1️⃣ User runs insmod or modprobe
+2️⃣ Kernel loads the .ko file into kernel memory
+3️⃣ Kernel resolves symbol dependencies
+4️⃣ Kernel executes module initialization function
+
+
+
+
 
