@@ -224,6 +224,10 @@ int main()
 
 9. Difference between ioremap and mmap 
 
+ioremap() is a kernel function used by device drivers to map physical device memory into kernel virtual address space, 
+while mmap() is a system call used in user space to map files or device memory into a process's virtual address space.
+
+
 Feature	                ioremap()	                                                mmap()
 Space	                Kernel space	                                            User space
 Purpose	                Map physical device I/O memory → kernel virtual address	    Map file/device memory → user virtual address
@@ -231,6 +235,14 @@ Used in	                Device drivers	                                         
 Defined in	            Linux kernel	                                            POSIX system call
 Returns	                Kernel virtual address	                                    User virtual address
 
+10. How remap_pfn_range() works
 
+remap_pfn_range() is a Linux kernel function used in a driver’s mmap() implementation to map physical memory pages (device memory) 
+into a user process's virtual address space by creating appropriate page table entries.
+
+remap_pfn_range() is a Linux kernel function used in device drivers to map physical memory pages into user space virtual memory.
+It is typically used inside the driver’s mmap() file operation.
+
+This allows a user-space program to directly access device memory (MMIO or DMA buffers).
 
 
