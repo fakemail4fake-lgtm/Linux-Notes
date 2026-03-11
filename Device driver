@@ -49,6 +49,67 @@ When a module is loaded:
 3️⃣ Kernel resolves symbol dependencies
 4️⃣ Kernel executes module initialization function
 
+3. what is the difference between insmod and modprobe
+
+insmod loads a module directly, while modprobe loads the module along with its dependencies automatically.
+
+insmod:
+Loads a kernel module directly
+Requires full .ko file
+Does not handle dependencies
+
+modprobe:
+Loads module from /lib/modules
+Automatically loads dependencies
+Recommended command
+
+What modprobe does internally:
+Searches module in
+/lib/modules/$(uname -r)/
+Checks module dependencies
+Loads required modules automatically
+Inserts the requested module.
+
+4. what is the use of __inti and __exit in linux module programming
+
+In Linux kernel module programming, __init and __exit are macros used to mark initialization and cleanup functions of a kernel module.
+They help the kernel optimize memory usage.
+
+__init is used to mark the initialization function of a kernel module and its memory is freed after execution.
+__exit is used to mark the cleanup function that runs when the module is removed.
+
+5. what is copy_to_user / copy_from_user explain the complete flow
+
+copy_to_user() and copy_from_user() are kernel functions used to safely transfer data between kernel space and user space. 
+copy_from_user() copies data from user space to kernel space, while copy_to_user() copies data from kernel space to user space.
+Direct access between these spaces is not allowed for security and stability reasons.
+
+
+User Application
+       ↓
+write() system call
+       ↓
+VFS (Virtual File System)
+       ↓
+Driver write() function
+       ↓
+copy_from_user()
+       ↓
+Kernel buffer
+
+write(fd, "hello", 5);
+
+ssize_t my_write(struct file *file,
+                 const char __user *buf,
+                 size_t len,
+                 loff_t *off)
+{
+    char kbuf[100];
+    copy_from_user(kbuf, buf, len);
+    printk("Data from user: %s", kbuf);
+    return len;
+}
+
 
 
 
