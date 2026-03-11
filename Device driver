@@ -78,6 +78,9 @@ They help the kernel optimize memory usage.
 __init is used to mark the initialization function of a kernel module and its memory is freed after execution.
 __exit is used to mark the cleanup function that runs when the module is removed.
 
+The Linux kernel module loader calls the init function when a module is loaded and calls the exit function when the module is removed. 
+These functions are registered using module_init() and module_exit() macros.
+
 5. what is copy_to_user / copy_from_user explain the complete flow
 
 copy_to_user() and copy_from_user() are kernel functions used to safely transfer data between kernel space and user space. 
@@ -244,5 +247,31 @@ remap_pfn_range() is a Linux kernel function used in device drivers to map physi
 It is typically used inside the driver’s mmap() file operation.
 
 This allows a user-space program to directly access device memory (MMIO or DMA buffers).
+
+User Virtual Memory
+        │
+        │ mmap()
+        ▼
+Kernel Driver
+        │
+ remap_pfn_range()
+        ▼
+Device Physical Memory
+
+
+10. what are different modes to communicate between user space and kernel space
+
+In Linux, communication between User Space and Kernel Space happens through several mechanisms. 
+These mechanisms allow user programs to request services or exchange data with the kernel or device drivers.
+
+syscal/ioctl/proc/sysfs/mmap
+
+The main mechanisms for communication between user space and kernel space in Linux are system calls, 
+ioctl, procfs, sysfs, netlink sockets, memory mapping (mmap), signals, and device file interfaces.
+
+11. why do we use copy_to_user instead of memcpy
+
+copy_to_user() is used instead of memcpy() because it safely copies data from kernel space to user space by validating 
+the user memory and handling page faults, while memcpy() does not perform these checks and can crash the kernel.
 
 
