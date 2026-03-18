@@ -1,0 +1,17 @@
+1. Crash → check dmesg / logs
+2. Memory issue → use KASAN / kmemleak
+3. Hang → use lockdep / ftrace / RCU
+4. Performance → use perf
+5. Hard crash → use kdump / KGDB
+
+Kmemleak:
+  CONFIG_DEBUG_KMEMLEAK=y
+  kmemleak is a Linux kernel debugging feature used to detect memory leaks inside the kernel (not user-space programs).
+  . Records every allocation
+  . Scans memory for references (pointers)
+  . If an allocated block has no references → reported as leak
+
+  Output: 
+  cat /sys/kernel/debug/kmemleak
+  Trigger scan: echo scan > /sys/kernel/debug/kmemleak
+  
