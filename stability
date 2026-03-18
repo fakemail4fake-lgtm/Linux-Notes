@@ -4,7 +4,10 @@
 4. Performance → use perf
 5. Hard crash → use kdump / KGDB
 
-Kmemleak:
+KASAM: 
+  CONFIG_KASAN=y
+
+KMEMLEAK:
   CONFIG_DEBUG_KMEMLEAK=y
   kmemleak is a Linux kernel debugging feature used to detect memory leaks inside the kernel (not user-space programs).
   . Records every allocation
