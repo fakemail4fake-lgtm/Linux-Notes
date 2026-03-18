@@ -17,7 +17,18 @@ Ans:  #define REG32(addr) (*(volatile unsigned int *)(addr))
     int a, b = 10;
     static int x, y= 20;
     main() {
-      int a1;
-      static int b1;
+      int x1, y1;
+      static int x2, y2=30;
       const int c1;
     }
+ANS: 
+      Variable	Type	                  Section
+      a	      global uninit	      BSS
+      b	      global init	            Data
+      x	      static global uninit	BSS
+      y	      static global init	Data
+      x1	      local	                  Stack
+      y1	      local	                  Stack
+      x2	      static local uninit	BSS
+      y2	      static local init	      Data
+      c1	      const local	            Stack
