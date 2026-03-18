@@ -298,7 +298,8 @@ Top Half:  Runs immediately on interrupt, Executes in interrupt context, Cannot 
     }
 
 Bottom half: 
-SoftIrq:  
+SoftIrq: A SoftIRQ is a deferred interrupt mechanism that runs after the hard IRQ (top half), 
+still in interrupt context but outside the immediate ISR. 
     Top half
        ↓
     raise_softirq()
