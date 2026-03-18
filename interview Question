@@ -32,3 +32,4 @@ ANS:
       x2	      static local uninit	BSS
       y2	      static local init	      Data
       c1	      const local	            Stack
+14. memory fragmentation. Internal and external fragmentation ?
