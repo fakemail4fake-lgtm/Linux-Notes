@@ -1,0 +1,23 @@
+Palnar company
+1. difference between mutex and semaphore
+2. volatile keyword
+3. shallow & deep copy
+4. singleton class. where it is needed
+5. PWM, DAC, DC motor
+6. write a macro ti write the  value @ address 0x40000000. set the send bit and check whether it is set or not
+Ans:  #define REG32(addr) (*(volatile unsigned int *)(addr)) 
+      REG32(0x40000000) = value;
+7. prority inversion, deadlock
+8. write a sudo code for circular buffer
+9. arbitration, clock schetching in i2c
+10. vector table, interrupt service routine
+11. what happen when stack overflow.
+12. undefined behaviour
+13. In below program where the variable are stored, like data , stack, heap
+    int a, b = 10;
+    static int x, y= 20;
+    main() {
+      int a1;
+      static int b1;
+      const int c1;
+    }
