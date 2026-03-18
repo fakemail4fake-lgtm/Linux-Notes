@@ -274,4 +274,46 @@ ioctl, procfs, sysfs, netlink sockets, memory mapping (mmap), signals, and devic
 copy_to_user() is used instead of memcpy() because it safely copies data from kernel space to user space by validating 
 the user memory and handling page faults, while memcpy() does not perform these checks and can crash the kernel.
 
+12. Top half and bottom half handlers:
+    
+Top Half  → Immediate, fast, critical work
+Bottom Half → Deferred, slow, non-critical work
+    
+Top Half:  Runs immediately on interrupt, Executes in interrupt context, Cannot sleep, Must be very fast
+    irqreturn_t my_irq_handler(int irq, void *dev_id)
+    {
+        // Top half
+        read_device_status();
+        // Schedule bottom half
+        schedule_work(&my_work);          // Workqueue
+        raise_softirq(NET_RX_SOFTIRQ);    // SoftIRQ
+        tasklet_schedule(&my_tasklet);    // tasklet
+        return IRQ_HANDLED;
+    }
+
+    // Bottom half function
+    void my_work_func(struct work_struct *work)
+    {
+        printk("Processing data in bottom half\n");
+    }
+
+Bottom half: 
+SoftIrq:  
+    Top half
+       ↓
+    raise_softirq()
+       ↓
+    Marked pending
+       ↓
+    Executed after IRQ exit
+
+WorkQueue: 
+    Top half
+       ↓
+    schedule_work()
+       ↓
+    Added to workqueue
+       ↓
+    Kernel thread executes it
+
 
