@@ -6,6 +6,21 @@
 
 KASAM: 
   CONFIG_KASAN=y
+  CONFIG_KASAN_INLINE=y
+  CONFIG_DEBUG_KERNEL=y
+  CONFIG_STACKTRACE=y
+    KASAN detects: Buffer overflows, Use-after-free, Out-of-bounds access, Invalid memory access
+
+Compile-time instrumentation used for checking memory accesses. Compiler inserts function calls (__asan_load*(addr), __asan_store*(addr)) 
+before each memory access of size 1, 2, 4, 8 or 16. These functions check whether memory access is valid or not by checking corresponding 
+shadow memory.
+
+
+1. Shadow Mapping: Each 8 bytes of actual memory is mapped to 1 byte in the shadow region, which indicates if that memory is "poisoned" 
+(unsafe to access) or "clean" (safe).
+2. Compile-time Instrumentation: The compiler inserts checks before every memory access to verify the state of the shadow memory.
+3. Quarantine (Generic Mode): When memory is freed, it is placed in a "quarantine" instead of being immediately reused. 
+This prevents immediate reuse and allows KASAN to detect Use-After-Free bugs. 
 
 KMEMLEAK:
   CONFIG_DEBUG_KMEMLEAK=y
