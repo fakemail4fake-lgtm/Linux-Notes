@@ -1,0 +1,8 @@
+Memory fragmentation:
+
+  Memory fragmentation is when free memory exists, but it’s split into pieces that aren’t laid out in the way an allocator needs, so allocations become slower, waste space, or fail even though “enough total free memory” exists.
+  The two main kinds
+  External fragmentation (layout problem)
+    Free memory is scattered into many small non-contiguous holes. A request for a contiguous block (e.g., 2 MB) can fail even if there are >2 MB free in total, because it isn’t in one run.
+  Internal fragmentation (rounding problem)
+    An allocator gives you a block larger than requested (due to fixed size classes, alignment, pages, cachelines). The unused bytes inside the allocated block are wasted.
