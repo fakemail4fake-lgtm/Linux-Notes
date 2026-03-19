@@ -15,12 +15,38 @@ Compile-time instrumentation used for checking memory accesses. Compiler inserts
 before each memory access of size 1, 2, 4, 8 or 16. These functions check whether memory access is valid or not by checking corresponding 
 shadow memory.
 
-
 1. Shadow Mapping: Each 8 bytes of actual memory is mapped to 1 byte in the shadow region, which indicates if that memory is "poisoned" 
 (unsafe to access) or "clean" (safe).
 2. Compile-time Instrumentation: The compiler inserts checks before every memory access to verify the state of the shadow memory.
 3. Quarantine (Generic Mode): When memory is freed, it is placed in a "quarantine" instead of being immediately reused. 
 This prevents immediate reuse and allows KASAN to detect Use-After-Free bugs. 
+
+
+1 shadow byte covers 8 bytes of real memory
+shadow_addr = (addr >> 3) + KASAN_SHADOW_OFFSET
+example:
+if  addr = 0xffff888012345678 then below is the shadow address
+shadow = (addr >> 3) + offset
+shadow = (0xffff888012345678 >> 3) +  0xdffffc0000000000 = 0xffffed1002468acf
+
+Real memory	  Shadow memory
+8 bytes	        1 byte
+1 GB	          128 MB
+
+addr = 0xffff888012345678 shadow = (addr >> 3) + offset
+
+Type of kasan:
+
+1. Generic KASAN:  Uses shadow memory, Precise, Slow (high overhead)
+
+2. Software Tag-Based KASAN :  Uses tags instead of shadow bytes,  Faster than generic
+
+3. Hardware Tag-Based KASAN (ARM MTE): 
+👉 Uses hardware memory tagging
+Each pointer has a tag, Each memory region has a tag, Must match → otherwise fault
+
+
+
 
 KMEMLEAK:
   CONFIG_DEBUG_KMEMLEAK=y
