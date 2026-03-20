@@ -1,3 +1,41 @@
+1. Device tree:
+
+    1. How Device Tree nodes become platform_devices during boot? 
+        function : of_platform_populate()
+        At boot, the kernel must convert these device tree nodes → kernel devices using of_platform_populate() calls from arch/arm64/kernel/setup.c
+
+        start_kernel()
+          ↓
+        setup_arch()
+          ↓
+        unflatten_device_tree()
+          ↓
+        of_platform_default_populate()
+          ↓
+        of_platform_populate()     --->  It walks through the device tree nodes and creates platform devices.
+
+        The function flow of of_platform_populate()
+
+        scan device tree
+          ↓
+        for each node
+          ↓
+        check compatible property
+          ↓
+        create platform_device
+          ↓
+        register device with platform bus  -->  platform_device_register(&my_device);
+
+    Kernel driver code calls platform_driver_register(&my_driver); to register the driver
+
+    when the platform device name is matched with platform driver then the probe function will be called.
+
+How are platform devices created from the device tree? 
+
+During kernel boot, the device tree is parsed and of_platform_populate() scans the device tree nodes. For each compatible node, 
+the kernel creates a platform_device and registers it with the platform bus. Drivers registered with platform_driver then
+match these devices and their probe() function is executed.
+
 1. how we register the character device driver
 
 In the Linux Kernel, a character device driver must be registered with the kernel so the kernel knows that your driver handles a 
