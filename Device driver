@@ -36,6 +36,39 @@ During kernel boot, the device tree is parsed and of_platform_populate() scans t
 the kernel creates a platform_device and registers it with the platform bus. Drivers registered with platform_driver then
 match these devices and their probe() function is executed.
 
+How to add the device with device tree overlay:
+
+The Device Tree Sources (dts) and Device Tree Source Includes (dtsi) must be compiled (dtb: Device Tree Binary)
+Device Tree available under /sys/firmware/devicetree/base and /proc/device-tree/
+Convert to readable form: dtc -I fs -O dts -s /sys/firmware/devicetree/base > /tmp/dt.dts
+
+my_overlay.dts
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			my_dev_label: my_device {
+				compatible = "brightlight,mydev";
+				status = "okay";
+				string_var = "Hello, DT!";
+				int_var = <123>;
+			};
+		};
+	};
+};
+Compiling the Device Tree Overlay:
+dtc -I dts -O dtb my_overlay.dts -o my_overlay.dtbo
+
+Applying the Device Tree Overlay:   sudo dtoverlay my_overlay.dtbo
+Remove the device tree Overlay:  sudo dtoverlay -R my_overlay
+Inspect the device tree:  ls /proc/device-tree/my_device/
+compatible  int_var  name  status  string_var
+
+
+
 1. how we register the character device driver
 
 In the Linux Kernel, a character device driver must be registered with the kernel so the kernel knows that your driver handles a 
