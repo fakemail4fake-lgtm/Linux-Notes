@@ -11,6 +11,7 @@ STM-64	  9.953 Gbps
 STM-256	  39.813 Gbps
 
 OTN: 
+
   FEC:
   “In OTN, FEC uses Reed-Solomon RS(255,239). The transmitter adds 16 parity bytes to 239 data bytes. At the receiver, a syndrome is calculated to detect errors. 
   If errors are present, the algorithm locates and corrects up to 8 byte errors per codeword. If errors exceed this limit, uncorrectable errors occur, leading to performance degradation.”
