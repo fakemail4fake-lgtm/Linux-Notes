@@ -67,3 +67,50 @@ Layer	    Alarm
 OTU	      FEC errors
 ODU	      May still be OK
 OPU	      Data corruption possible
+
+Performance Monitoring:
+1. OTU Layer PM (Line Monitoring)
+👉 Focus: Physical transmission quality
+
+Key Parameters:
+
+🔹 Pre-FEC BER:  Bit Error Rate before correction
+👉 Example: If BER increases → fiber degrading
+🔹 Post-FEC BER: After error correction
+👉 Example: If still high → link is failing
+🔹 BBE (Background Block Errors)
+Errors not causing major failure
+🔹 ES (Errored Seconds)
+Seconds with at least one error
+🔹 SES (Severely Errored Seconds)
+Seconds with many errors
+🔹 UAS (Unavailable Seconds)
+Link considered down
+
+
+📦 2. ODU Layer PM (Path Monitoring)
+👉 Focus: End-to-end data path
+
+🔹 BIP-8 (Bit Interleaved Parity): Detects bit errors across path
+👉 Example: Misrouting or corruption inside network
+🔹 BEI (Backward Error Indication)
+Remote node reports errors back
+🔹 BDI (Backward Defect Indication)
+Indicates remote failure
+🔹 LCK / OCI Monitoring
+Track path conditions
+
+📦 3. OPU Layer PM (Payload Monitoring)
+👉 Focus: Client signal quality
+
+🔹 Payload mismatch
+Wrong mapping
+🔹 Client signal errors
+Ethernet/SDH issues
+⏱️ Measurement Intervals (Important)
+
+PM is collected in:
+🔹 15-minute intervals
+Short-term monitoring
+🔹 24-hour intervals
+Long-term analysis
