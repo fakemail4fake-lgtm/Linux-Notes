@@ -1,1 +1,69 @@
+SDH: 
+In SDH, monitoring is divided into section, line, and path levels. Section monitoring checks the physical link between adjacent nodes using RSOH. 
+Line monitoring checks performance across multiplex sections using MSOH. 
+Path monitoring ensures end-to-end data integrity using POH. Each level isolates faults at different parts of the network.”
+
+STM-0	    51.84 Mbps
+STM-1	    155.52 Mbps
+STM-4	    622.08 Mbps
+STM-16	  2.488 Gbps
+STM-64	  9.953 Gbps
+STM-256	  39.813 Gbps
+
 OTN: 
+  FEC:
+  “In OTN, FEC uses Reed-Solomon RS(255,239). The transmitter adds 16 parity bytes to 239 data bytes. At the receiver, a syndrome is calculated to detect errors. 
+  If errors are present, the algorithm locates and corrects up to 8 byte errors per codeword. If errors exceed this limit, uncorrectable errors occur, leading to performance degradation.”
+
+  For 239 acutal data btye 16 FEC byte added = 239+16 = 255.
+  2t = n - k = 255 - 239 = 16 
+  t = 8, In 239 acutal data 8 byte is corrected using Reed-Solomon algarithm.
+
+OTN	  Payload	  Factor	  Line Rate  PartiyBytes 
+OTU1	2.488 G	  255/238	  ~2.66 G    255-238 = 17
+OTU2	9.953 G	  255/237	  ~10.7 G    255-237 = 18
+OTU3	39.813 G	255/236	  ~43 G      255-236 = 19
+
+Alarms:
+
+1. OTU Layer Alarms (Physical / Line Level):
+🔴 LOS (Loss of Signal) No optical signal received
+Example: Fiber cut or  Transceiver unplugged
+🔴 LOF (Loss of Frame) Frame alignment lost
+Example: Severe noise, Clock mismatch
+🔴 OTU-AIS (Alarm Indication Signal) Upstream failure indication
+Example: Remote node failure → sends AIS downstream
+🔴 FEC Errors: Too many bit errors corrected or uncorrectable
+Example: Fiber degradation, Long-distance attenuation
+
+2. ODU Layer Alarms (Path / Transport Level)
+🔴 ODU-AIS:  Indicates upstream failure at ODU layer
+Example: Higher node failure propagates alarm
+🔴 ODU-OCI (Open Connection Indication) No valid connection present
+Example: Cross-connect misconfiguration
+🔴 ODU-LCK (Locked Signal): Administrative lock
+Example: Maintenance mode enabled
+🔴 TIM (Trace Identifier Mismatch): Expected path ≠ received path
+Example: Wrong routing / misconnection
+
+3. OPU Layer Alarms (Payload Level)
+🔴 Payload Mismatch / Mapping Errors:  Client signal not matching expected format
+Example: Wrong client type mapped (Ethernet vs SDH)
+🔴 Client Signal Fail Client data lost
+Example: Ethernet link down feeding OTN
+
+🔴 Fiber Cut:
+Layer	   Alarm
+OTU	    LOS
+ODU	    AIS
+OPU	    Payload loss
+🔴 Misconnection
+Layer	  Alarm
+OTU	    OK
+ODU	    TIM
+OPU	    Wrong data
+🔴 Noise / Signal Degradation
+Layer	    Alarm
+OTU	      FEC errors
+ODU	      May still be OK
+OPU	      Data corruption possible
