@@ -44,8 +44,18 @@ Qualcom programming question: 2026
 Ribbon Technologies:
 1. CSF, AIS, TIM alarms
 2. program to clear the first bit set from the lsb
+Ans:   n = n & (n-1)
 3. what happens if pthread_join is not called
 4. what is pthread_attach and pthread_join and difference
+Ans:  Memory and system resources leak and in Over time → you may run out of resources
+      When a thread finishes, its resources are not fully released & System accumulates "zombie threads"
+      pthread_create failed: Resource temporarily unavailable
+      Finished thread = still occupies: stack memory & thread descriptor
+      Only pthread_join() frees these resources
 
+      pthread_detach(tid); Automatically cleans up after thread exits
+      ✔ Best for "fire-and-forget" tasks
 
+      pthread_join(pid, NULL)  --> will block the main thread untill thread is joined
+      pthread_detach(pid)  --> main process cannot be blocked.
 
