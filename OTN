@@ -107,7 +107,7 @@ Track path conditions
 🔹 Payload mismatch
 Wrong mapping
 🔹 Client signal errors
-Ethernet/SDH issues
+Ethernet/SDH issues  ( SDH -> AMP) (Ethernet -> GMP (oduflex) GFP (ethernet packets))
 ⏱️ Measurement Intervals (Important)
 
 PM is collected in:
