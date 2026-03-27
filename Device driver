@@ -189,7 +189,7 @@ ssize_t my_write(struct file *file,
 6. what is copy-on-write 
 
 Copy-on-Write (COW) is a memory management technique where multiple processes share the same memory pages until one process modifies the data, 
-at which point the operating system creates a separate copy of the page.
+at that point the operating system creates a separate copy of the page.
 
 fork() called
       ↓
