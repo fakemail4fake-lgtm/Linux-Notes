@@ -1,0 +1,105 @@
+Bitwise operation
+
+1. Find the number power of 2
+    n & (n-1) == 0     --> power of 2
+
+2. swap two number without using third variable using xor
+    a = a ^ b
+    b = a ^ b
+    a = a ^ b
+
+3. count number of set bits
+    int countbits(int n) {
+        int count=0;
+        while(n) {
+            n &= (n-1);
+            count++;
+        }
+        return count;
+    }
+
+4. get/set/clear/toggle a bit in number
+    int get_set_clear_toogle(int num, int bit){
+
+        int mask = (1 << bit);
+        is_set = (x & mask) ? 1 : 0;
+        // set
+        x |= mask;
+        // clear
+        x &= ~mask;
+        // toggle
+        x ^= mask;
+    }
+
+5.find number is even or odd
+    return (n & 1)
+
+6. n an array where every element appears exactly twice except one element that appears once, find that single element in 
+O(n)O(n) time and O(1)O(1) space.
+    int singlenumber( int *arr, int n) {
+        int x=0;
+        for(int i=0; i<n; i++) {
+            x ^= arr[i]
+        }
+        return x;
+    }
+
+7. In an array where every element appears exactly twice except two elements that appear once, find the two unique elements.
+    void find2diffnum(int *arr) {
+        int zeroxor = 0, onexor = 0, allxor =0;
+        int i=0, count = 0;
+        int n = sizeof(arr)/sizeof(arr[0]);
+        printf("size of arr %d\n", n);
+    
+        for(i=0;i<n;i++){
+            allxor ^= arr[i];
+        }
+    
+        while(allxor)
+        {
+            if(allxor & (1 << count))
+                break;
+            else
+                count++;
+        }
+        printf("msb bit set index %d\n", count);
+    
+        for(i=0;i<n;i++){
+            if(arr[i] & (1 << count))
+                onexor ^= arr[i];
+            else
+                zeroxor ^= arr[i];
+        }
+        printf("%d %d\n", onexor, zeroxor);    
+    }
+
+8. revers a 32 bit number
+    uint32_t reverseBits(uint32_t n) {
+        uint32_t res = 0;
+        for(i=0; i<32;i++) {
+            res <<= 1;
+            res |= (n & 1);
+            n = n >> 1;
+        }
+        return res;
+    } 
+
+9. turnoff the rightmost bit
+    return (n & (n-1))
+
+10. find the repeated number in sequence numbers
+    repatednum(int *arr) {
+        int allxor = 0;
+        int xor = 0;
+        int len = sizeof(arr)/sizeof(arr[0])-1;
+        for(i=0;i<=n;i++) {
+            allxor ^= arr[i];
+        }
+        for(i=1;i<=n;i++) {
+            xor ^= i;
+        }
+
+        return (allxor ^ xor);
+    }
+
+11. 
