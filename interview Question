@@ -40,6 +40,9 @@ Qualcom programming question: 2026
 2. Find the merge the point of 2 linked list
 3. Program to find given number is power of 2
 4. write a program to print the 1 to N number without for and while loop
+5. Find the no of set bit in given number N
+6. Buffer implementation
+7. How the adsp and cpu communication happens in qualcom ?
 
 Ribbon Technologies:
 1. CSF, AIS, TIM alarms
